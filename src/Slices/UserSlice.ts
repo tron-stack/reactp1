@@ -26,15 +26,15 @@ export const loginUser = createAsyncThunk(
             const res = await axios.post('http://localhost:8000/users/login', credentials);
             return {
                 userId: res.data.userId,
+                userName: res.data.userName,
                 firstName: res.data.firstName,
                 lastName: res.data.lastName,
-                userName: res.data.userName,
                 email: res.data.email,
                 userRole: res.data.userRole
             }
         } catch (e) {
             console.log(e);
-            return thunkAPI.rejectWithValue('something went wrong');
+           
         }
     }
 )
@@ -134,9 +134,6 @@ export const UserSlice = createSlice({
     reducers: {
         toggleError : (state) => {
             state.error = !state.error;
-        },
-        clearUsers : (state) => {
-            state.users = undefined;
         }
     },
     extraReducers: (builder) => {
@@ -218,6 +215,6 @@ export const UserSlice = createSlice({
 
 
 
-export const {toggleError, clearUsers} = UserSlice.actions;
+export const {toggleError} = UserSlice.actions;
 
 export default UserSlice.reducer;

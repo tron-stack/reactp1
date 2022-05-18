@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { loginUser, toggleError } from '../../Slices/UserSlice';
 import { AppDispatch } from '../../UserStore';
 
-import "./LoginForm.css";
 
 export const Login:React.FC =() => {
 
@@ -26,6 +25,7 @@ export const Login:React.FC =() => {
             userName,
             password
         };
+
 
         dispatch(loginUser(credentials));
     }

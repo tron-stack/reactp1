@@ -68,7 +68,7 @@ export const getResolvedReimbursements = createAsyncThunk(
     }
 )
 export const getPendingReimbursements = createAsyncThunk(
-    "reimbursements/resolved",
+    "reimbursements/pending",
     async(thunkAPI)=> {
         try {
             axios.defaults.withCredentials = true;
@@ -130,7 +130,7 @@ export const reimbursementSlice = createSlice({
     initialState: initialReimbursementState,
     reducers: {
         clearReimbursements: (state) => {
-            state.reimbursements = undefined
+            state.reimbursements = undefined;
         }
     },
     extraReducers: (builder) => {

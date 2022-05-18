@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 import { RootState } from '../../UserStore';
 import { useNavigate } from 'react-router-dom';
 import { Login } from '../../Components/LoginPage/LoginPage';
-import "./LoginPage.css";
 
 export const LoginPage: React.FC = () => {
 
@@ -13,7 +12,12 @@ export const LoginPage: React.FC = () => {
 
     useEffect(()=>{
         if(!userState.error && userState.user){
-            navigator('/feed');
+            if (userState.user.userRole == 2){
+            navigator('/managerHomePage');
+            } else {
+                navigator('/employeeHomePage');
+            }
+
         }
     }, [userState]);
 
