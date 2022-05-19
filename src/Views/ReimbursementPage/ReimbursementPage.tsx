@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-//import Navbar
 import { RootState, AppDispatch } from "../../UserStore";
 import { useNavigate } from "react-router-dom";
 import { getReimbursments } from "../../Slices/ReimbursementSlice";
-//import CreateReimbursement
 import { Loading } from "../../Components/Loading/Loading";
 import { Reimbursement } from "../../Components/Reimbursements/Reimbursements";
 import { IReimbursement } from "../../Interfaces/IReimbursement";
@@ -14,23 +12,28 @@ import { IReimbursement } from "../../Interfaces/IReimbursement";
 export const ReimbursementPage:React.FC = () => {
 
     const userInfo = useSelector((state:RootState) => state.user);
-    const reimbursements = useSelector((state:RootState) => state.reimbursements);
+    const reimbursementsInfo = useSelector((state:RootState) => state.reimbursements);
     const navigator = useNavigate();
     const dispatch:AppDispatch = useDispatch();
 
     useEffect(()=>{
         if(!userInfo.user){
             navigator('/login');
-        } else if(userInfo.user && !reimbursements.reimbursements) {
+        } else if(userInfo.user && !reimbursementsInfo.reimbursements) {
             dispatch(getReimbursments());
         }
-        console.log("UserState: ", userInfo, "Reimbursements: ", reimbursements);
+        console.log("UserState: ", userInfo, "Reimbursements: ", reimbursementsInfo);
 
-    },[userInfo, reimbursements.reimbursements]);
+    },[userInfo, reimbursementsInfo.reimbursements]);
 
     return (
         <div className="reimbursement-page">
+            {reimbursementsInfo.reimbursements ? reimbursementsInfo.reimbursements
+                .map((reimbursement:IReimbursement) =>{
+                    return <Reimbursement {...reimbursement} key={reimbursement.reimbursementId} />
+            }):
             <Loading/>
+        }
         </div>
     )
 
