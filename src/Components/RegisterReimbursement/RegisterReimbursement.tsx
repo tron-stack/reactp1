@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../UserStore";
 import { registerReimbursement } from "../../Slices/ReimbursementSlice";
 import { IReimbursement } from "../../Interfaces/IReimbursement";
+import { useNavigate } from "react-router-dom";
 //import CreateReimbursement.css
 
 export const RegisterReimbursement:React.FC = () => {
@@ -10,7 +11,7 @@ export const RegisterReimbursement:React.FC = () => {
     const [amount, setAmount] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
     const [reimbursementType, setReimbursementType] = useState<number>(0);
-
+    const navigator = useNavigate();
     const currentUser = useSelector((state:RootState)=>state.user.user);
     const dispatch:AppDispatch = useDispatch();
 
@@ -40,17 +41,18 @@ export const RegisterReimbursement:React.FC = () => {
                 reimbursementStatus: 1
             }
             dispatch(registerReimbursement(reimbursement));
+            
         }
+        window.location.reload;
     }
     useEffect(()=>{
         console.log(amount, description, reimbursementType);
     },[amount, description, reimbursementType]);
 
-
     return(
         <div className="create-reimbursement">
             <div className="amount-container">
-                <input className="amount" onChange={handleChangeAmount}></input>
+                <input className="amount" placeholder="amount" type="number" onChange={handleChangeAmount}></input>
             </div>
             <div className="description-container">
                 <textarea className="content" onChange={handleChangeDescription} placeholder="Describe your Reimbursement" maxLength={256}></textarea>
@@ -67,3 +69,4 @@ export const RegisterReimbursement:React.FC = () => {
     </div>
     )
 }
+
