@@ -1,11 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../UserStore';
 
 import { IReimbursement } from '../../Interfaces/IReimbursement';
+import { approveReimbursementById, denyReimbursementById} from "../../Slices/ReimbursementSlice";
 
 //import './Reimbursement.css';
 //import defaultImage from "../../deafultpic.jpg";
 
 export const Reimbursement:React.FC<IReimbursement> = (Reimbursement:IReimbursement) => {
+
+    const dispatch:AppDispatch = useDispatch();
+    const userInfo = useSelector((state:RootState) => state.user);
+    const [reimbursementStatus, setReimbursementStatus] = useState<number>(0);
+
+    const isManager = () => {
+        if(userInfo.currentProfile?.userRole == 2){
+            return true;
+        } else return false;
+    }
+
+    const isPending = () => {
+        if(isManager() && reimbursementStatus == 1){
+            return true;
+        } else return false;
+    }
+
+    const handleResolve = (event:React.MouseEvent<HTMLButtonElement>) => {
+        let actionValue = parseInt((event.target as HTMLButtonElement).value);
+        let reimbId = event.currentTarget?.getAttribute("data-id");
+        if(actionValue == 2){
+            if(reimbId){
+                dispatch(approveReimbursementById(reimbId));
+            }
+        } else if(actionValue == 3){
+            if(reimbId) {
+                dispatch(denyReimbursementById(reimbId));
+            }
+        } 
+    }
 
     return(
         <div className="reimbursement">
@@ -36,6 +69,14 @@ export const Reimbursement:React.FC<IReimbursement> = (Reimbursement:IReimbursem
             <div className='reimbursement-status'>
                 <h3 className='reimb-status'>{Reimbursement.reimbursementStatus}</h3>
             </div>
+            { isPending()?
+            <div className="actions">
+                <button className="approve-btn" value="2" data-id = {Reimbursement.reimbursementId} 
+                    onClick={handleResolve}>Approve</button>
+                <button className="deny-btn" value="3" >Deny</button>
+            </div> 
+            : <div></div>
+            }
         </div>
     )
 

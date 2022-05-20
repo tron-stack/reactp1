@@ -38,7 +38,7 @@ export const Login:React.FC =() => {
             <form className="login-form">
                 <div className="input-div">
                     <h4 className="input-h4">Please Enter Username</h4>
-                    <input autoComplete="off" className="login-input" type="text" placeholder="Username" name="userName" onChange={handleInput}/>
+                    <input className="login-input" type="text" name="userName" onChange={handleInput}/>
                 </div>
                 <div className="input-div">
                     <h4 className="input-h4">Please Enter Password</h4>

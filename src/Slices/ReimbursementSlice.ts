@@ -6,6 +6,7 @@ import { IReimbursement } from "../Interfaces/IReimbursement";
 interface ReimbursementSliceState {
     loading: boolean,
     error: boolean,
+    reimbursement?: IReimbursement,
     reimbursements?: IReimbursement[]
 }
 
@@ -28,6 +29,7 @@ export const getReimbursments = createAsyncThunk(
         }
     }
 )
+
 export const getReimbursmentsForManager = createAsyncThunk(
     "reimbursements/getManager",
     async (thunkAPI) => {
@@ -42,6 +44,7 @@ export const getReimbursmentsForManager = createAsyncThunk(
         }
     }
 )
+
 export const registerReimbursement = createAsyncThunk(
     "reimbursements/register",
     async (newReimbursement:IReimbursement, thunkAPI) => {
@@ -55,6 +58,7 @@ export const registerReimbursement = createAsyncThunk(
         }
     }
 )
+
 export const getResolvedReimbursements = createAsyncThunk(
     "reimbursements/resolved",
     async(thunkAPI)=> {
@@ -67,6 +71,7 @@ export const getResolvedReimbursements = createAsyncThunk(
         }
     }
 )
+
 export const getPendingReimbursements = createAsyncThunk(
     "reimbursements/pending",
     async(thunkAPI)=> {
@@ -92,6 +97,7 @@ export const getRequestsByStatus = createAsyncThunk(
         }
     }
 )
+
 export const getReimbursmentsById = createAsyncThunk(
     "reimbursements/reimbursementsManager",
     async(userId: number | string, thunkAPI) => {
@@ -103,6 +109,7 @@ export const getReimbursmentsById = createAsyncThunk(
         }
     }
 )
+
 export const approveReimbursementById =createAsyncThunk (
     "reimbursements/approve",
     async (reimbursementId: number | string, thunkAPI) => {
@@ -114,6 +121,7 @@ export const approveReimbursementById =createAsyncThunk (
         }
     }
 )
+
 export const denyReimbursementById = createAsyncThunk(
     "reimbursements/deny",
     async (reimbursementId: number | string, thunkAPI) => {
@@ -125,6 +133,7 @@ export const denyReimbursementById = createAsyncThunk(
         }
     }
 )
+
 export const reimbursementSlice = createSlice({
     name: 'posts',
     initialState: initialReimbursementState,
