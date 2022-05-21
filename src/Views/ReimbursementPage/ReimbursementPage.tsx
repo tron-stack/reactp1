@@ -6,6 +6,7 @@ import { approveReimbursementById, getPendingReimbursements, getReimbursments, g
 import { Loading } from "../../Components/Loading/Loading";
 import { Reimbursement } from "../../Components/Reimbursements/Reimbursements";
 import { IReimbursement } from "../../Interfaces/IReimbursement";
+import { Navbar } from "../../Components/Navbar/Navbar";
 
 //import Reimbursementpage.css
 
@@ -19,12 +20,12 @@ export const ReimbursementPage:React.FC = () => {
     const [reimbursementStatus, setReimbursementStatus] = useState<number>(0);
 
     useEffect(()=>{
-        if(!userInfo.user){
+        if(!userInfo.currentProfile){
             navigator('/login');
-        } else if(userInfo.user && !reimbursementsInfo.reimbursements) {
-            if(userInfo.user.userRole == 1){
+        } else if(userInfo.currentProfile && !reimbursementsInfo.reimbursements) {
+            if(userInfo.currentProfile.userRole == 1){
                 dispatch(getReimbursments());
-            }else if(userInfo.user.userRole == 2){
+            }else if(userInfo.currentProfile.userRole == 2){
                 dispatch(getReimbursmentsForManager())
             }               
         }
@@ -59,18 +60,19 @@ export const ReimbursementPage:React.FC = () => {
     return (
         <div className="reimbursement-page">
             <div className="header">
+               
                 <div className="type-container">
                 { isManager()? 
                     <select className="select-type" onChange={handleStatusChangeType}>
                         <option value="1">Pending</option>
                         <option value="2">Resolved</option>
-                        <option value="3" selected>All</option>
+                        <option value="3" >All</option>
                     </select> :
                     <select className="select-type" onChange={handleStatusChangeType}>
                         <option value="1">Pending</option>
                         <option value="2">Approved</option>
                         <option value="3">Denied</option>
-                        <option value="4" selected>All</option>
+                        <option value="4" >All</option>
                     </select>
                 }                  
                 </div>

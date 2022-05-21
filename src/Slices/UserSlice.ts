@@ -5,7 +5,6 @@ import {IUser} from "../Interfaces/IUser";
 interface UserSliceState {
     loading: boolean,
     error: boolean,
-    user?: IUser,
     currentProfile?: IUser,
     users?: IUser[]
 }
@@ -24,9 +23,11 @@ export const loginUser = createAsyncThunk(
     async(credentials:Login, thunkAPI) =>{
         try {
             const res = await axios.post('http://localhost:8000/users/login', credentials);
+            console.log(res.data);
             return {
                 userId: res.data.userId,
                 userName: res.data.userName,
+                password: res.data.password,
                 firstName: res.data.firstName,
                 lastName: res.data.lastName,
                 email: res.data.email,
@@ -63,7 +64,7 @@ export const logout = createAsyncThunk(
     async (thunkAPI) => {
         try{
             axios.defaults.withCredentials = true;
-            const res = axios.get("http://localhost:8000/users/logout");
+            const res = await axios.put("http://localhost:8000/users/logout");
         } catch(e){
             console.log(e);
         }
@@ -104,6 +105,7 @@ export const getUserDetails = createAsyncThunk(
             return {
                 userId: res.data.userId,
                 userName: res.data.userName,
+                password: res.data.password,
                 firstName: res.data.firstName,
                 lastName: res.data.lastName,
                 email: res.data.email,
@@ -143,7 +145,7 @@ export const UserSlice = createSlice({
         });
         builder.addCase(loginUser.fulfilled, (state, action) => {
             //The payload in this case, is the return from our asyncThunk from above
-            state.user = action.payload;
+            state.currentProfile = action.payload;
             state.error = false;
             state.loading = false;
         });
@@ -163,7 +165,7 @@ export const UserSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(logout.fulfilled, (state, action)=> {
-            state.user = undefined;
+            state.currentProfile = undefined;
         });
         builder.addCase(updateUser.pending, (state, action) => {
             state.loading = true;

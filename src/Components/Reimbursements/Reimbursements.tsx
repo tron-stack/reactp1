@@ -49,10 +49,10 @@ export const Reimbursement:React.FC<IReimbursement> = (Reimbursement:IReimbursem
                 <h3 className='reimbursement-total'>{Reimbursement.amount}</h3>
             </div>
             <div className='reimbursement-submit-date'>
-                <h3 className='reimb-submit-date'>{Reimbursement.dateSubmitted.toDateString()}</h3>
+                <h3 className='reimb-submit-date'>{Reimbursement.dateSubmitted?.toDateString()}</h3>
             </div>
             <div className='reimbursement-resolved-date'>
-                <h3 className='reimb-resolved-date'>{Reimbursement.dateResolved.toDateString()}</h3>
+                <h3 className='reimb-resolved-date'>{Reimbursement.dateResolved?.toDateString()}</h3>
             </div>
             <div className='reimbursement-description'>
                 <h3 className='reimbursement-desc'>{Reimbursement.description}</h3>

@@ -10,9 +10,9 @@ export const RegisterReimbursement:React.FC = () => {
 
     const [amount, setAmount] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
-    const [reimbursementType, setReimbursementType] = useState<number>(0);
+    const [reimbursementType, setReimbursementType] = useState<number>(1);
     const navigator = useNavigate();
-    const currentUser = useSelector((state:RootState)=>state.user.user);
+    const currentUser = useSelector((state:RootState)=>state.user);
     const dispatch:AppDispatch = useDispatch();
 
     const handleChangeAmount = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -26,24 +26,18 @@ export const RegisterReimbursement:React.FC = () => {
     }
 
     const handleReimbursement =  () => {
-        let d = new Date().getTime();
-        let author = currentUser?.userId;
-        
+                
         if(currentUser){
             let reimbursement:IReimbursement = {
-                reimbursementId: 0,
                 amount,
-                dateSubmitted: new Date(),
-                dateResolved: new Date(),
                 description,
-                reimbursementAuthor: currentUser.userId,
-                reimbursementType,
-                reimbursementStatus: 1
+                reimbursementAuthor: 1,
+                reimbursementType
             }
             dispatch(registerReimbursement(reimbursement));
             
         }
-        window.location.reload;
+
     }
     useEffect(()=>{
         console.log(amount, description, reimbursementType);

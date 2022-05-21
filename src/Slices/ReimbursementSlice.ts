@@ -50,6 +50,7 @@ export const registerReimbursement = createAsyncThunk(
     async (newReimbursement:IReimbursement, thunkAPI) => {
         try{
             axios.defaults.withCredentials = true;
+            console.log(newReimbursement);
             const res = await axios.post("http://localhost:8000/reimbursements/register", newReimbursement);
             console.log(res.data);
             return newReimbursement;

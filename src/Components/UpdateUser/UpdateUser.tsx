@@ -11,7 +11,8 @@ export const UpdateUser: React.FC =() => {
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
-    const currentUser = useSelector((state:RootState)=> state.user.user);
+
+    const userInfo = useSelector((state:RootState)=> state.user);
     const navigator = useNavigate();
     const dispatch:AppDispatch = useDispatch();
 
@@ -24,21 +25,25 @@ export const UpdateUser: React.FC =() => {
     const handleChangeEmail = (event:React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     }
+   
+    
     
 
     const handleUpdateUser = () => {
        
-        if (currentUser){
+        if (userInfo.currentProfile){
             let user:IUser ={
-                userId: currentUser?.userId,
-                userName: currentUser.userName,
+                userId: userInfo?.currentProfile?.userId,
+                userName: userInfo.currentProfile?.userName,
+                password: userInfo.currentProfile.password,
                 firstName,
                 lastName,
                 email,
-                userRole: currentUser.userRole
+                userRole: userInfo.currentProfile?.userRole
 
             }
             dispatch(updateUser(user));
+            
         }
     }
 
@@ -51,15 +56,15 @@ export const UpdateUser: React.FC =() => {
     <div className="update-user">
         <div className="first-name-container">
             <p>First Name: </p>
-            <input className="first-name-input" type="text" placeholder={currentUser?.firstName} onChange={handleChangeFirst}/>
+            <input className="first-name-input" type="text" placeholder={userInfo.currentProfile?.firstName} onChange={handleChangeFirst}/>
         </div>
         <div className="last-name-container">
             <p>last Name: </p>
-            <input className="last-name-input" type="text" placeholder={currentUser?.lastName} onChange={handleChangeLast}/>
+            <input className="last-name-input" type="text" placeholder={userInfo.currentProfile?.lastName} onChange={handleChangeLast}/>
         </div>
         <div className="email-container">
             <p>Email: </p>
-            <input className="email-input" type="text" placeholder={currentUser?.email} onChange={handleChangeEmail}/>
+            <input className="email-input" type="text" placeholder={userInfo.currentProfile?.email} onChange={handleChangeEmail}/>
         </div>
         <button className="update-btn" onClick={handleUpdateUser}>Update!</button>
     </div>

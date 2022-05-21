@@ -8,24 +8,27 @@ import { getUserDetails, getUserDetailsbyUsername } from "../../Slices/UserSlice
 import { Reimbursement } from "../../Components/Reimbursements/Reimbursements";
 import { IReimbursement } from "../../Interfaces/IReimbursement";
 import { UpdateUser } from "../../Components/UpdateUser/UpdateUser";
+import { Navbar } from "../../Components/Navbar/Navbar";
 
 
 export const ProfilePage:React.FC =() => {
 
-    const profile = useSelector((state:RootState)=>state.user);
+    const userInfo = useSelector((state:RootState)=>state.user);
     const dispatch:AppDispatch = useDispatch();
 
-    const username = profile.currentProfile?.userName;
+    const username = userInfo.currentProfile?.userName;
 
     useEffect(()=>{
-        console.log("get info about current user: ", username);
-        if(username && !profile.currentProfile){
-            dispatch(getUserDetailsbyUsername(username));
+        console.log("get info about current user: ", userInfo.currentProfile?.userName);
+        /*
+        if(userInfo.currentProfile){
+            dispatch(getUserDetailsbyUsername(userInfo.currentProfile.userName));
         }
-    }, [profile]);
+        */
+    }, [userInfo]);
 
-    const isManager = () =>{
-        if (profile.currentProfile?.userRole == 2){
+     const isManager = () =>{
+        if (userInfo.currentProfile?.userRole == 2){
             return true;
         } else {
             return false;
@@ -35,19 +38,14 @@ export const ProfilePage:React.FC =() => {
     return(
     
         <div>
+            <Navbar/>
        
-            <h1>Profile of {profile.currentProfile?.firstName} {profile.currentProfile?.lastName}</h1>
-            <h2>User ID: {profile.currentProfile?.userId}</h2>
-            <h3>Email: {profile.currentProfile?.email}</h3>
-            <h4>User Role: {isManager() ? <h4>Manager</h4> : <h4>Employee</h4>}
-            </h4>
-
+            <h1>Profile of {userInfo.currentProfile?.firstName} {userInfo.currentProfile?.lastName}</h1>
+            <h2>User ID: {userInfo.currentProfile?.userId}</h2>
+            <h3>Email: {userInfo.currentProfile?.email}</h3>
+            <span>User Role: </span>{isManager() ? <span>Manager</span> : <span>Employee</span>}
             
             <UpdateUser/>
-
-
-                
-            
         </div>)
 }
 
