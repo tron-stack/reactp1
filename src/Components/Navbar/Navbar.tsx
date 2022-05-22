@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../Slices/UserSlice";
+import { clearUsers, logout } from "../../Slices/UserSlice";
 import { AppDispatch } from "../../UserStore";
 import { clearReimbursements } from "../../Slices/ReimbursementSlice";
 //import image for navbar
@@ -9,12 +9,14 @@ import { clearReimbursements } from "../../Slices/ReimbursementSlice";
 import { RootState } from "../../UserStore";
 
 export const Navbar: React.FC = () => {
-
+    const navigator = useNavigate();
     const dispatch:AppDispatch = useDispatch();
 
     const handleLogout = () => {
         dispatch(logout());
         dispatch(clearReimbursements());
+        dispatch(clearUsers());
+        navigator('/login');
     }
 
     const isManager = () =>{
@@ -53,6 +55,9 @@ export const Navbar: React.FC = () => {
                 </li>
                 <li className="nav-item">
                     <Link to={'/profile'} className="nav-link">Profile</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to={'/search'} className="nav-link">Search</Link>
                 </li>
                 <li className="logout">
                     <Link to={"/login"} className="nav-link">

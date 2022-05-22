@@ -15,12 +15,17 @@ const initialReimbursementState: ReimbursementSliceState = {
     error: false
 }
 
+type userRequestStatus = {
+    reimbursementAuthor: number | string,
+    reimbursementStatus: number | string
+}
+
 export const getReimbursments = createAsyncThunk(
     "reimbursements/getEmployee",
-    async (thunkAPI) => {
+    async (id: number | string, thunkAPI) => {
         try{
             axios.defaults.withCredentials =true;
-            const res = await axios.get("http://localhost:8000/reimbursments/all");
+            const res = await axios.get(`http://localhost:8000/reimbursements/all/${id}`);
 
             return res.data;
 
@@ -35,7 +40,7 @@ export const getReimbursmentsForManager = createAsyncThunk(
     async (thunkAPI) => {
         try{
             axios.defaults.withCredentials =true;
-            const res = await axios.get("http://localhost:8000/reimbursments/");
+            const res = await axios.get("http://localhost:8000/reimbursements/");
 
             return res.data;
 
@@ -53,7 +58,7 @@ export const registerReimbursement = createAsyncThunk(
             console.log(newReimbursement);
             const res = await axios.post("http://localhost:8000/reimbursements/register", newReimbursement);
             console.log(res.data);
-            return newReimbursement;
+            return res.data;
         } catch (e){
             console.log(e);
         }
@@ -88,9 +93,10 @@ export const getPendingReimbursements = createAsyncThunk(
 
 export const getRequestsByStatus = createAsyncThunk(
     "reimbursements/status",
-    async(reimbursementStatusId: number | string, thunkAPI) => {
+    async({reimbursementAuthor, reimbursementStatus}:{reimbursementAuthor:number|string, reimbursementStatus: number | string}, thunkAPI) => {
         try{
-            const res = await axios.get(`http://localhost:8000/reimbursements/status/${reimbursementStatusId}`);
+            axios.defaults.withCredentials = true;
+            const res = await axios.get(`http://localhost:8000/reimbursements/status/${reimbursementAuthor}&${reimbursementStatus}`);
             return res.data;
         }
         catch (e) {

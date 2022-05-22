@@ -8,24 +8,27 @@ import { approveReimbursementById, denyReimbursementById} from "../../Slices/Rei
 //import './Reimbursement.css';
 //import defaultImage from "../../deafultpic.jpg";
 
-export const Reimbursement:React.FC<IReimbursement> = (Reimbursement:IReimbursement) => {
+export const Reimbursement:React.FC<IReimbursement> = (reimbursement:IReimbursement) => {
 
     const dispatch:AppDispatch = useDispatch();
     const userInfo = useSelector((state:RootState) => state.user);
-    const [reimbursementStatus, setReimbursementStatus] = useState<number>(0);
+   /* 
+   const reimbursementInfo = useSelector((state:RootState) => state.reimbursements);
+    const [reimbursementStatus, setReimbursementStatus] = useState<number>(0); 
+    */
 
     const isManager = () => {
         if(userInfo.currentProfile?.userRole == 2){
             return true;
         } else return false;
     }
-
+/*
     const isPending = () => {
-        if(isManager() && reimbursementStatus == 1){
+        if(reimbursementInfo.reimbursement?.reimbursementStatus == 1 &&isManager()){
             return true;
         } else return false;
     }
-
+*/
     const handleResolve = (event:React.MouseEvent<HTMLButtonElement>) => {
         let actionValue = parseInt((event.target as HTMLButtonElement).value);
         let reimbId = event.currentTarget?.getAttribute("data-id");
@@ -43,40 +46,52 @@ export const Reimbursement:React.FC<IReimbursement> = (Reimbursement:IReimbursem
     return(
         <div className="reimbursement">
             <div className='reimbursement-id'>
-                <h3 className='reimbursement-number'>{Reimbursement.reimbursementId}</h3>
+                <span>Reimbursement Id: </span>
+                <span className='reimbursement-number'>{reimbursement.reimbursementId}</span>
             </div>
             <div className='reimbursement-amount'>
-                <h3 className='reimbursement-total'>{Reimbursement.amount}</h3>
+               <span>Total: </span>
+                <span className='reimbursement-total'>{reimbursement.amount}</span>
             </div>
             <div className='reimbursement-submit-date'>
-                <h3 className='reimb-submit-date'>{Reimbursement.dateSubmitted?.toDateString()}</h3>
+                <span>Submitted Date: </span>
+                
+                <span className='reimb-submit-date'>{reimbursement.dateSubmitted?.toString()}</span>
             </div>
             <div className='reimbursement-resolved-date'>
-                <h3 className='reimb-resolved-date'>{Reimbursement.dateResolved?.toDateString()}</h3>
+                <span>Resolved Date: </span>
+                <span className='reimb-resolved-date'>{reimbursement.dateResolved?.toString()}</span>
             </div>
             <div className='reimbursement-description'>
-                <h3 className='reimbursement-desc'>{Reimbursement.description}</h3>
+                <span>Description: </span>
+                <span className='reimbursement-desc'>{reimbursement.description}</span>
             </div>
             <div className="reimbursement-author">
-                <h3 className="reimbursement-auth">{Reimbursement.reimbursementAuthor}</h3>
+                <span>Author Id: </span>
+                <span className="reimbursement-auth">{reimbursement.reimbursementAuthor}</span>
             </div>
             <div className='reimbursement-resolver'>
-                <h3 className='reimbursement-res'>{Reimbursement.reimbursementResolver}</h3>
+                <span>Resolver Id: </span>
+                <span className='reimbursement-res'>{reimbursement.reimbursementResolver}</span>
             </div>
             <div className='reimbursement-type'>
-                <h3 className='reimb-type'>{Reimbursement.reimbursementType}</h3>
+                <span>Type: </span>
+                <span className='reimb-type'>{reimbursement.reimbursementType}</span>
             </div>
             <div className='reimbursement-status'>
-                <h3 className='reimb-status'>{Reimbursement.reimbursementStatus}</h3>
+                <span>Status: </span>
+                <span className='reimb-status'>{reimbursement.reimbursementStatus}</span>
             </div>
-            { isPending()?
-            <div className="actions">
-                <button className="approve-btn" value="2" data-id = {Reimbursement.reimbursementId} 
-                    onClick={handleResolve}>Approve</button>
-                <button className="deny-btn" value="3" >Deny</button>
-            </div> 
-            : <div></div>
+            <div>
+            { isManager()?
+                <div className="actions">
+                    <button className="approve-btn" value="2" data-id = {reimbursement.reimbursementId} 
+                        onClick={handleResolve}>Approve</button>
+                    <button className="deny-btn" value="3" data-id={reimbursement.reimbursementId} onClick={handleResolve}>Deny</button>
+                </div> 
+                    : <></>
             }
+            </div>
         </div>
     )
 

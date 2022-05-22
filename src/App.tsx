@@ -4,6 +4,7 @@ import { LoginPage } from './Views/LoginPage/LoginPage';
 import { ProfilePage } from './Views/ProfilePage/ProfilePage';
 import { ReimbursementPage } from './Views/ReimbursementPage/ReimbursementPage';
 import { HomePage } from './Views/HomePage/HomePage';
+import { SearchPage } from './Views/SearchPage/SearchPage';
 //import {ReimbursementPage}
 //import {ProfilePage}
 //import './App.css';
@@ -17,6 +18,7 @@ function App() {
         <Route path="/userhome" element={<HomePage/>} />
         <Route path="/profile" element={<ProfilePage/>}/>
         <Route path='/reimbursements' element={<ReimbursementPage/>} />
+        <Route path='/search' element={<SearchPage/>}/>
       </Routes>
     </HashRouter>
   );

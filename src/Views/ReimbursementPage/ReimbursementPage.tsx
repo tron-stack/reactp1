@@ -14,17 +14,21 @@ export const ReimbursementPage:React.FC = () => {
 
     const userInfo = useSelector((state:RootState) => state.user);
     const reimbursementsInfo = useSelector((state:RootState) => state.reimbursements);
+   // const reimbursementInfo = useSelector((state:RootState) => state.reimbursements.reimbursement);
     const navigator = useNavigate();
     const dispatch:AppDispatch = useDispatch();
 
-    const [reimbursementStatus, setReimbursementStatus] = useState<number>(0);
+
+    const [reimbursementAuthor, setReimbursementAuthor] = useState<number>(1);
+    const [reimbursementStatus, setReimbursementStatus] = useState<number>(1);
 
     useEffect(()=>{
         if(!userInfo.currentProfile){
             navigator('/login');
         } else if(userInfo.currentProfile && !reimbursementsInfo.reimbursements) {
             if(userInfo.currentProfile.userRole == 1){
-                dispatch(getReimbursments());
+                setReimbursementAuthor(userInfo.currentProfile.userId);
+                dispatch(getReimbursments(userInfo.currentProfile.userId));
             }else if(userInfo.currentProfile.userRole == 2){
                 dispatch(getReimbursmentsForManager())
             }               
@@ -40,13 +44,14 @@ export const ReimbursementPage:React.FC = () => {
     }
 
     const handleStatusChangeType = (event:React.ChangeEvent<HTMLSelectElement>) => {
-        
         setReimbursementStatus(parseInt(event.target.value));
+    }
 
+    const handleGetReimbursements = () =>{
         if(!isManager()){
-            dispatch(getRequestsByStatus(reimbursementStatus));
-        }else if(!isManager() && reimbursementStatus == 4){
-            dispatch(getReimbursments());
+            dispatch(getRequestsByStatus({reimbursementAuthor, reimbursementStatus}));
+        }else if(!isManager() && reimbursementStatus == 4 && userInfo.currentProfile){
+            dispatch(getReimbursments(userInfo.currentProfile.userId));
         }
         if(isManager() && reimbursementStatus == 1){
             dispatch(getPendingReimbursements());
@@ -60,7 +65,7 @@ export const ReimbursementPage:React.FC = () => {
     return (
         <div className="reimbursement-page">
             <div className="header">
-               
+               <Navbar/>
                 <div className="type-container">
                 { isManager()? 
                     <select className="select-type" onChange={handleStatusChangeType}>
@@ -74,17 +79,14 @@ export const ReimbursementPage:React.FC = () => {
                         <option value="3">Denied</option>
                         <option value="4" >All</option>
                     </select>
-                }                  
+                }   
+                <button onClick={handleGetReimbursements}>Get Reimbursements</button>               
                 </div>
             </div>
             <div className="reimbursement-list">
             {reimbursementsInfo.reimbursements ? reimbursementsInfo.reimbursements
             .map((reimbursement:IReimbursement) =>{
-                return <div className="reimbursement-container">
-                            <div className="reimbursement">
-                                <Reimbursement {...reimbursement} key={reimbursement.reimbursementId} />
-                            </div>
-                        </div>
+                return <Reimbursement {...reimbursement} key={reimbursement.reimbursementId} />     
             }):
             <Loading/>
             }

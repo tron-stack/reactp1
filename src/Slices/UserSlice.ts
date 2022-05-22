@@ -7,6 +7,9 @@ interface UserSliceState {
     error: boolean,
     currentProfile?: IUser,
     users?: IUser[]
+   // user: IUser
+
+
 }
 const initialUserState: UserSliceState = {
     loading: false,
@@ -136,6 +139,10 @@ export const UserSlice = createSlice({
     reducers: {
         toggleError : (state) => {
             state.error = !state.error;
+        },
+        clearUsers : (state) => {
+            state.users = undefined;
+            state.currentProfile = undefined;
         }
     },
     extraReducers: (builder) => {
@@ -183,9 +190,7 @@ export const UserSlice = createSlice({
         });
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
             state.loading =false;
-            if(state.users && action.payload){
-                state.users = [action.payload, ...state.users];
-            }
+            state.users = action.payload;
         });
         builder.addCase(getAllUsers.rejected, (state, action)=> {
             state.error = true;
@@ -206,7 +211,7 @@ export const UserSlice = createSlice({
         });
         builder.addCase(getUserDetailsbyUsername.fulfilled, (state, action) => {
             state.loading =false;
-            
+           
         });
         builder.addCase(getUserDetailsbyUsername.rejected, (state, action)=> {
             state.error = true;
@@ -218,5 +223,5 @@ export const UserSlice = createSlice({
 
 
 export const {toggleError} = UserSlice.actions;
-
+export const {clearUsers} = UserSlice.actions;
 export default UserSlice.reducer;
